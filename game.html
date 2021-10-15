@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Game</title>
+	<script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+	<script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+	<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+	<style type="text/css">
+		
+		#game {
+			text-align: center;
+			font-size: 22px;
+			border: 3px dashed black;
+			width: 50%;
+			margin-left: 25%;
+		}
+
+	</style>
+</head>
+<body>
+	<div id="game"></div>
+
+	<script type="text/babel">
+
+		class Game extends React.Component {
+
+			constructor(props) {
+				super(props);
+				this.state = {
+					num1: 1,
+					num2: 1,
+					score: 0,
+					response: ""
+				};
+			}	
+
+			render() {
+
+				if(this.state.score === 10)
+				{
+					return(
+						<div>
+							<h1>You Won</h1>
+						</div>	
+					)
+				}
+
+				return(
+					<div>
+						<h1>{this.state.num1} + {this.state.num2}</h1>
+						<input type="number" onKeyPress={this.func} onChange={this.update} value={this.state.response} /><br /><br />
+						Score : {this.state.score}<br /><br />
+					</div>	
+				);
+			}
+
+			func = (event) => {
+				if(event.key === "Enter"){
+					const answer = parseInt(this.state.response)
+					if(this.state.num1 + this.state.num2 === answer){
+						this.setState(state => ({
+							score: state.score + 1,
+							response: "",
+							num1: Math.ceil(Math.random() * 10 ),
+							num2: Math.ceil(Math.random() * 10 )
+						}))
+					}
+					else {
+						this.setState(state => ({
+							score: state.score - 1,
+							response: ""
+						}))
+					}
+				}
+			}
+
+			update = (event) => {
+				this.setState({
+					response: event.target.value
+			})
+			};
+		}
+
+		ReactDOM.render(<Game />, document.querySelector("#game"))
+
+	</script>
+</body>
+</html>
